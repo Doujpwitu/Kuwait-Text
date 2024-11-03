@@ -1,5 +1,3 @@
-const SPREADSHEET_ID = '1r2vMFENPLmxYA_qyJksPvsA3O2dPfjv4BcsozKYqfcE';
-const API_KEY = 'AIzaSyAGE6S7YFJJKb2kqAkVAH23VsCd0DWeXfk'; // You'll need to replace this with your actual API key
 let currentTextIndex = 0;
 let texts = [];
 
