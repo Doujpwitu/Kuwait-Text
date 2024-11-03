@@ -4,7 +4,7 @@ let texts = [];
 // Initialize the Google API client
 function initClient() {
     return gapi.client.init({
-        apiKey: API_KEY,
+        apiKey: config.API_KEY,
         discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
     }).then(function() {
         loadDataset();
@@ -22,7 +22,7 @@ function loadGoogleAPI() {
 async function loadDataset() {
     try {
         const response = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEET_ID,
+            spreadsheetId: config.SPREADSHEET_ID,
             range: 'Sheet1!A:A',
         });
         texts = response.result.values.flat() || [];
@@ -38,7 +38,7 @@ async function labelText(sentiment) {
     if (currentTextIndex < texts.length) {
         try {
             await gapi.client.sheets.spreadsheets.values.append({
-                spreadsheetId: SPREADSHEET_ID,
+                spreadsheetId: config.SPREADSHEET_ID,
                 range: 'Sheet1!A:D',
                 valueInputOption: 'RAW',
                 insertDataOption: 'INSERT_ROWS',
