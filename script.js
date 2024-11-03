@@ -1,16 +1,22 @@
 let currentTextIndex = 0;
 let texts = [];
 
+// Add these constants at the top
+const CLIENT_ID = '703145199309-ttgpbaqfi0me42j781hjsqias8takq84.apps.googleusercontent.com';
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
+
 // Initialize the Google API client
 function initClient() {
     return gapi.client.init({
         apiKey: config.API_KEY,
+        clientId: CLIENT_ID,
+        scope: SCOPES,
         discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
     }).then(function() {
-        loadDataset();
-    }).catch(function(error) {
-        console.error('Error initializing Google API client:', error);
-        document.getElementById('textDisplay').textContent = 'خطأ في تهيئة Google API';
+        // Listen for sign-in state changes
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+        // Handle the initial sign-in state
+        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
     });
 }
 
@@ -76,6 +82,15 @@ function updateDisplay() {
         progressBar.style.width = '100%';
         progressBar.setAttribute('aria-valuenow', 100);
         progressBar.textContent = '100%';
+    }
+}
+
+function updateSigninStatus(isSignedIn) {
+    if (isSignedIn) {
+        loadDataset();
+    } else {
+        // Add a sign-in button to your HTML
+        gapi.auth2.getAuthInstance().signIn();
     }
 }
 
